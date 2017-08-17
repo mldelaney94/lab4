@@ -1,6 +1,16 @@
 #!/usr/bin/python3
-from flask import Flask
+from flask import Flask, redirect, render_template, request, url_for
 from server import app
-@app.route("/")
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return "<h1>Oh</h1>"
+    if request.method == "POST":
+        name = request.form["name"]
+        zID = int(request.form["zID"])
+        description = request.form["desc"]
+        return redirect(url_for("hello", name=name, id=zID, desc=description))
+    return render_template("index.html")
+
+@app.route("/Hello/<name>/<id>/<desc>")
+def hello(name, id, desc):
+    return render_template("hello.html", name=name, id=id, desc=desc)
